@@ -1,5 +1,4 @@
 import logo from './logo.svg';
-import _ from 'lodash';
 import './App.css';
 import { useState } from 'react';
 import { ethers } from 'ethers'
@@ -10,6 +9,7 @@ const greeterAddress = "your-contract-address";
 
 export const App = () => {
   const { ethereum } = window;
+  const { abi } = Greeter;
   const [greeting, setGreetingValue] = useState();
 
   // request metamask account
@@ -20,8 +20,8 @@ export const App = () => {
   // print the greeting message
   const fetchGreeting = async () => {
     if (ethereum) {
-      const provider = new ethers.providers.Web3Provider(window.ethereum);
-      const contract = new ethers.Contract(greeterAddress, Greeter.abi, provider);
+      const provider = new ethers.providers.Web3Provider(ethereum);
+      const contract = new ethers.Contract(greeterAddress, abi, provider);
       try {
         console.log('Greeting: ', await contract.greet());
       } catch (err) {
@@ -35,9 +35,9 @@ export const App = () => {
     if (!greeting || !ethereum) return;
     
     await requestAccount();
-    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
-    const contract = new ethers.Contract(greeterAddress, Greeter.abi, signer);
+    const contract = new ethers.Contract(greeterAddress, abi, signer);
     const transaction = await contract.setGreeting(greeting);
     setGreetingValue('');
     await transaction.wait();
