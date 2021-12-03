@@ -14,7 +14,7 @@ export const App = () => {
 
   // request metamask account
   const requestAccount = async () => {
-    await window.ethereum.request({ method: 'eth_requestAccounts' });
+    await ethereum.request({ method: 'eth_requestAccounts' });
   };
 
   // print the greeting message
